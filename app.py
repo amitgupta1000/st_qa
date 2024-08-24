@@ -21,8 +21,8 @@ import re
 #google_api_key = st.secrets["GOOGLE_API_KEY"]
 #groq_api_key = st.secrets["GROQ_API_KEY"]
 
-os.environ["GOOGLE_API_KEY"] == st.secrets["GOOGLE_API_KEY"]
-os.environ["GROQ_API_KEY"] == st.secrets["GROQ_API_KEY"]
+#os.environ["GOOGLE_API_KEY"] == st.secrets["GOOGLE_API_KEY"]
+#os.environ["GROQ_API_KEY"] == st.secrets["GROQ_API_KEY"]
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
