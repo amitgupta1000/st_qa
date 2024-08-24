@@ -90,7 +90,7 @@ def main():
         st.session_state.answers = []
 
     # File upload section
-    uploaded_files = st.file_uploader(("Drop files here", label="", accept_multiple=True)
+    uploaded_files = st.file_uploader(("Drop files here", label=="", accept_multiple=True)
 
     if uploaded_files:
         for uploaded_file in uploaded_files:
