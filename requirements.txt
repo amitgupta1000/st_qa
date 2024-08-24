@@ -1,11 +1,11 @@
 pymupdf
 pandas
-streamlit
 langchain-groq
-langchain-chroma
 langchain-google-genai
 scikit-learn
 langchain
 numpy
-chromadb
 nltk
+streamlit==1.32.0
+langchain-chroma==0.1.3
+chromadb==0.4.15
