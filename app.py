@@ -17,6 +17,7 @@ import numpy as np
 import nltk
 import logging
 import tempfile
+nltk.download('punkt')
 
 google_api_key = st.secrets["GOOGLE_API_KEY"]
 groq_api_key = st.secrets["GROQ_API_KEY"]
