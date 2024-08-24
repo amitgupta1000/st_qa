@@ -14,10 +14,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 from langchain.chains import RetrievalQA
 from langchain.schema import Document
 import numpy as np
-import nltk
 import logging
 import tempfile
-nltk.download('punkt')
+import re
 
 google_api_key = st.secrets["GOOGLE_API_KEY"]
 groq_api_key = st.secrets["GROQ_API_KEY"]
@@ -112,7 +111,7 @@ def main():
     # Process the loaded text only if there is any
     if st.session_state.all_text:
         # Tokenize sentences
-        sentences = nltk.sent_tokenize(st.session_state.all_text)
+        sentences = re.split(r'(?<=[.?!])\s+', (st.session_state.all_text))
         sentences = [{'sentence': x, 'index': i} for i, x in enumerate(sentences)]
 
         # Combine sentences for context
