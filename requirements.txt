@@ -1,0 +1,11 @@
+pymupdf
+pandas
+streamlit
+langchain-groq
+langchain-chroma
+langchain-google-genai
+scikit-learn
+langchain
+numpy
+chromadb
+nltk
