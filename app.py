@@ -40,10 +40,10 @@ def load_text(uploaded_file, file_type):
                 for page in doc:
                     text += page.get_text()
                 doc.close()
-            elif file_type == "text":
+            elif file_type == "txt":
                 with open(file_path, 'r', encoding='utf-8') as f:
                     text = f.read()
-            elif file_type == "excel":
+            elif file_type == "xlsx" or "xls":
                 df = pd.read_excel(file_path)
                 text = df.to_string(index=False)
             elif file_type == "csv":
