@@ -1,31 +1,27 @@
-__import__('pysqlite3')
-import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
-import sqlite3
 import os
-import fitz  # PyMuPDF for PDF handling
-import pandas as pd
-import streamlit as st
-from langchain_groq import ChatGroq
-from langchain_chroma import Chroma
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
-from typing import List, Dict, Any
-from sklearn.metrics.pairwise import cosine_similarity
-from langchain.chains import RetrievalQA
-from langchain.schema import Document
-import numpy as np
 import logging
 import tempfile
 import re
-
-#google_api_key = st.secrets["GOOGLE_API_KEY"]
-#groq_api_key = st.secrets["GROQ_API_KEY"]
-
-#os.environ["GOOGLE_API_KEY"] == st.secrets["GOOGLE_API_KEY"]
-#os.environ["GROQ_API_KEY"] == st.secrets["GROQ_API_KEY"]
+import numpy as np
+import pandas as pd
+import streamlit as st
+import fitz  # PyMuPDF for PDF handling
+from langchain_groq import ChatGroq
+from langchain_chroma import Chroma
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain.chains import RetrievalQA
+from langchain.schema import Document
+from sklearn.metrics.pairwise import cosine_similarity
+from typing import List, Dict, Any
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
+
+# Load API keys from secrets
+google_api_key = st.secrets["GOOGLE_API_KEY"]
+groq_api_key = st.secrets["GROQ_API_KEY"]
+os.environ["GOOGLE_API_KEY"] = google_api_key
+os.environ["GROQ_API_KEY"] = groq_api_key
 
 # Function to load text from different file types
 def load_text(uploaded_file, file_type):
@@ -33,6 +29,7 @@ def load_text(uploaded_file, file_type):
         with tempfile.NamedTemporaryFile(delete=False) as temp_file:
             temp_file.write(uploaded_file.read())
             file_path = temp_file.name  # Get the temporary file path
+
             if file_type == "pdf":
                 doc = fitz.open(file_path)
                 text = ""
@@ -48,12 +45,14 @@ def load_text(uploaded_file, file_type):
             elif file_type == "csv":
                 df = pd.read_csv(file_path)
                 text = df.to_string(index=False)
+
             os.remove(temp_file.name)  # Delete the temporary file after processing
             return text
+
     except Exception as e:
         logging.error(f"Error loading file {uploaded_file.name}: {e}")
         return None
-        
+
 # Function to combine sentences for context
 def combine_sentences(sentences: List[Dict[str, Any]], buffer_size: int = 1) -> List[Dict[str, Any]]:
     for i in range(len(sentences)):
@@ -83,7 +82,7 @@ def calculate_cosine_distances(sentences: List[Dict[str, Any]]) -> (List[float],
 # Streamlit app
 def main():
     st.title("Stateful Question-Answering System")
-    
+
     # Initialize session state
     if 'uploaded_files' not in st.session_state:
         st.session_state.uploaded_files = []
@@ -107,11 +106,11 @@ def main():
                 st.success(f"Loaded content from {uploaded_file.name}")
             else:
                 st.error(f"Failed to load content from {uploaded_file.name}.")
-    
+
     # Process the loaded text only if there is any
     if st.session_state.all_text:
         # Tokenize sentences
-        sentences = re.split(r'(?<=[.?!])\s+', (st.session_state.all_text))
+        sentences = re.split(r'(?<=[.?!])\s+', st.session_state.all_text)
         sentences = [{'sentence': x, 'index': i} for i, x in enumerate(sentences)]
 
         # Combine sentences for context
@@ -140,6 +139,7 @@ def main():
             combined_text = ' '.join([d['sentence'] for d in group])
             chunks.append(combined_text)
             start_index = index + 1
+
         if start_index < len(sentences):
             combined_text = ' '.join([d['sentence'] for d in sentences[start_index:]])
             chunks.append(combined_text)
@@ -157,7 +157,6 @@ def main():
 
         # Question-Answering Section
         user_input = st.text_input("Ask your question:")
-        
         if st.button("Submit"):
             if user_input:
                 # Remember the question
@@ -166,7 +165,7 @@ def main():
                 # Extract the answer text from the result dictionary
                 result = qa_chain.invoke(user_input)
                 answer = result['result']
-                
+
                 # Store the answer
                 st.session_state.answers.append(answer)
 
@@ -187,6 +186,14 @@ def main():
                 [f"Q: {q}\nA: {a}" for q, a in zip(st.session_state.questions_asked, st.session_state.answers)]
             )
             st.download_button("Download Q&A", questions_answers, file_name="qa_session.txt")
+
+            # Clear session state
+            st.session_state.uploaded_files = []
+            st.session_state.all_text = ""
+            st.session_state.questions_asked = []
+            st.session_state.answers = []
+        else:
+            st.write("No questions were asked during this session.")
 
 if __name__ == "__main__":
     main()
