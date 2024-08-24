@@ -16,6 +16,7 @@ from langchain.schema import Document
 import numpy as np
 import nltk
 import logging
+import tempfile
 
 google_api_key = st.secrets["GOOGLE_API_KEY"]
 groq_api_key = st.secrets["GROQ_API_KEY"]
@@ -27,28 +28,32 @@ os.environ["GROQ_API_KEY"] == st.secrets["GROQ_API_KEY"]
 logging.basicConfig(level=logging.INFO)
 
 # Function to load text from different file types
-def load_text(file_path: str, file_type: str) -> str:
+def load_text(uploaded_file, file_type):
     try:
-        if file_type == "pdf":
-            doc = fitz.open(file_path)
-            text = ""
-            for page in doc:
-                text += page.get_text()
-            doc.close()
-        elif file_type == "text":
-            with open(file_path, 'r', encoding='utf-8') as f:
-                text = f.read()
-        elif file_type == "excel":
-            df = pd.read_excel(file_path)
-            text = df.to_string(index=False)
-        elif file_type == "csv":
-            df = pd.read_csv(file_path)
-            text = df.to_string(index=False)
-        return text
+        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+            temp_file.write(uploaded_file.read())
+            file_path = temp_file.name  # Get the temporary file path
+            if file_type == "pdf":
+                doc = fitz.open(file_path)
+                text = ""
+                for page in doc:
+                    text += page.get_text()
+                doc.close()
+            elif file_type == "text":
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    text = f.read()
+            elif file_type == "excel":
+                df = pd.read_excel(file_path)
+                text = df.to_string(index=False)
+            elif file_type == "csv":
+                df = pd.read_csv(file_path)
+                text = df.to_string(index=False)
+            os.remove(temp_file.name)  # Delete the temporary file after processing
+            return text
     except Exception as e:
-        logging.error(f"Error loading file {file_path}: {e}")
+        logging.error(f"Error loading file {uploaded_file.name}: {e}")
         return None
-
+        
 # Function to combine sentences for context
 def combine_sentences(sentences: List[Dict[str, Any]], buffer_size: int = 1) -> List[Dict[str, Any]]:
     for i in range(len(sentences)):
