@@ -6,6 +6,7 @@ scikit-learn
 langchain
 numpy
 nltk
-streamlit==1.32.0
-langchain-chroma==0.1.3
-chromadb==0.4.15
+streamlit
+langchain-chroma
+chromadb
+pysqlite3-binary>=3.35.0
