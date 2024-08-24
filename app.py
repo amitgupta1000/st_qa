@@ -90,26 +90,19 @@ def main():
         st.session_state.answers = []
 
     # File upload section
-    file_type = st.selectbox("Select file type:", ["pdf", "excel", "csv", "text", "done"])
-    
-    if file_type == "done":
-        if not st.session_state.uploaded_files:
-            st.error("No content loaded from the specified files. Exiting.")
-            return
-    else:
-        file_path = st.text_input("Enter the file path:", key="file_path")
-        if st.button("Load File"):
-            if file_path:
-                text = load_text(file_path, file_type)
-                if text is not None:
-                    st.session_state.all_text += text + "\n"  # Combine text from all files
-                    st.session_state.uploaded_files.append((file_type, file_path))
-                    st.success(f"Loaded content from {file_path}")
-                else:
-                    st.error(f"Failed to load content from {file_path}.")
-            else:
-                st.error("Please enter a valid file path.")
+    uploaded_files = st.file_uploader("Upload multiple files (pdf, text, excel, csv):", accept_multiple=True)
 
+    if uploaded_files:
+        for uploaded_file in uploaded_files:
+            file_type = os.path.splitext(uploaded_file.name)[1][1:]  # Get file extension
+            text = load_text(uploaded_file, file_type)
+            if text is not None:
+                st.session_state.all_text += text + "\n"  # Combine text from all files
+                st.session_state.uploaded_files.append((file_type, uploaded_file.name))
+                st.success(f"Loaded content from {uploaded_file.name}")
+            else:
+                st.error(f"Failed to load content from {uploaded_file.name}.")
+    
     # Process the loaded text only if there is any
     if st.session_state.all_text:
         # Tokenize sentences
