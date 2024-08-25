@@ -13,3 +13,6 @@ scikit-learn
 langchain
 numpy
 openpyxl
+opencv-python-headless
+Pillow
+tesseract
