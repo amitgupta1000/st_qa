@@ -3,7 +3,7 @@ pymupdf
 pandas
 pil
 pytesseract
-py2pdf
+pdf2image
 pysqlite3-binary
 langchain-community
 langchain-chroma
