@@ -12,3 +12,4 @@ langchain-google-genai
 scikit-learn
 langchain
 numpy
+openpyxl
