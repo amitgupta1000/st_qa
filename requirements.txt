@@ -1,6 +1,9 @@
 streamlit
 pymupdf
 pandas
+pil
+pytesseract
+py2pdf
 pysqlite3-binary
 langchain-community
 langchain-chroma
@@ -9,4 +12,3 @@ langchain-google-genai
 scikit-learn
 langchain
 numpy
-nltk
