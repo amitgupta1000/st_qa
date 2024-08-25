@@ -18,7 +18,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from typing import List, Dict, Any
 from pdf2image import convert_from_path
 import pytesseract
-from pillow import Image
+from PIL import Image
 import openpyxl
 
 
