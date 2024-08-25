@@ -47,7 +47,7 @@ def load_text(uploaded_file, file_type):
                     for page in doc:
                         text += page.get_text()
                     doc.close()
-                except RuntimeEror:
+                except IndexEror:
                     Images = convert_from_path(file_path, 600)
                     text = ''
                     for image in Images:
