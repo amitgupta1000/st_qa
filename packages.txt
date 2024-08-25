@@ -1,3 +1,2 @@
 tesseract-ocr
 tesseract-ocr-por
-sqlite3 >= 3.35.0
