@@ -53,7 +53,7 @@ def load_text(uploaded_file, file_type):
             elif file_type == "txt":
                 with open(file_path, 'r', encoding='utf-8') as f:
                     text = f.read()
-            elif file_type == "xlsx" or "xls":
+            elif file_type in ["xlsx", "xls"]:
                 df = pd.read_excel(file_path)
                 text = df.to_string(index=False)
             elif file_type == "csv":
