@@ -3,7 +3,7 @@ import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import sqlite3
 import os, re
-import pytesseract as tess
+import pytesseract
 from pytesseract import Output
 import pytesseract.pytesseract
 import streamlit as st
