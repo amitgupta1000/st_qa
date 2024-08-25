@@ -2,10 +2,9 @@ __import__('pysqlite3')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import sqlite3
-import os
+import os, re
 import logging
 import tempfile
-import re
 import numpy as np
 import pandas as pd
 import streamlit as st
@@ -17,6 +16,9 @@ from langchain.chains import RetrievalQA
 from langchain.schema import Document
 from sklearn.metrics.pairwise import cosine_similarity
 from typing import List, Dict, Any
+from pdf2image import convert_from_path
+import pytesseract
+from PIL import Image
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -35,11 +37,17 @@ def load_text(uploaded_file, file_type):
             file_path = temp_file.name  # Get the temporary file path
 
             if file_type == "pdf":
-                doc = fitz.open(file_path)
-                text = ""
-                for page in doc:
-                    text += page.get_text()
-                doc.close()
+                try:
+                    doc = fitz.open(file_path)
+                    text = ""
+                    for page in doc:
+                        text += page.get_text()
+                    doc.close()
+                except RuntimeEror:
+                    Images = convert_from_path(file_path, 600)
+                    text = ''
+                    for image in Images:
+                        text += pytesseract.image_to_string(image)
             elif file_type == "txt":
                 with open(file_path, 'r', encoding='utf-8') as f:
                     text = f.read()
@@ -49,6 +57,9 @@ def load_text(uploaded_file, file_type):
             elif file_type == "csv":
                 df = pd.read_csv(file_path)
                 text = df.to_string(index=False)
+            elif file_type == "jpg" or "jpeg" or "png":
+                image = Image.open(file_path)
+                text = pytesseract.image_to_string(image) #may need to do pre-processing
 
             os.remove(temp_file.name)  # Delete the temporary file after processing
             return text
