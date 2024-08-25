@@ -1,5 +1,4 @@
 __import__('pysqlite3')
-__import__('pytesseract')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import sqlite3
