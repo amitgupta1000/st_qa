@@ -20,10 +20,10 @@ from langchain.schema import Document
 from sklearn.metrics.pairwise import cosine_similarity
 from typing import List, Dict, Any
 from pdf2image import convert_from_path
-import pytesseract
+import pytesseract as ocr
 from PIL import Image
 import openpyxl
-pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract'
+
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 
@@ -51,7 +51,7 @@ def load_text(uploaded_file, file_type):
                     Images = convert_from_path(file_path, 600)
                     text = ''
                     for image in Images:
-                        text += pytesseract.image_to_string(image)
+                        text += ocr.image_to_string(image)
             elif file_type == "txt":
                 with open(file_path, 'r', encoding='utf-8') as f:
                     text = f.read()
@@ -63,7 +63,7 @@ def load_text(uploaded_file, file_type):
                 text = df.to_string(index=False)
             elif file_type in ["jpg", "jpeg", "png", "bmp", "gif"]:
                 image = Image.open(file_path)
-                text = pytesseract.image_to_string(image) #may need to do pre-processing
+                text = ocr.image_to_string(image) #may need to do pre-processing
 
             os.remove(temp_file.name)  # Delete the temporary file after processing
             return text
