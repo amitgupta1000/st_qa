@@ -57,7 +57,7 @@ def load_text(uploaded_file, file_type):
             elif file_type == "csv":
                 df = pd.read_csv(file_path)
                 text = df.to_string(index=False)
-            elif file_type == "jpg" or "jpeg" or "png":
+            elif file_type elif file_type in ["jpg", "jpeg", "png", "bmp", "gif"]:
                 image = Image.open(file_path)
                 text = pytesseract.image_to_string(image) #may need to do pre-processing
 
