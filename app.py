@@ -3,17 +3,14 @@ import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import sqlite3
 import os, re
-import pytesseract
 from pytesseract import Output
 import pytesseract.pytesseract
 import streamlit as st
-import PIL.Image
 import cv2
 import logging
 import tempfile
 import numpy as np
 import pandas as pd
-import streamlit as st
 import fitz  # PyMuPDF for PDF handling
 from langchain_groq import ChatGroq
 from langchain_chroma import Chroma
