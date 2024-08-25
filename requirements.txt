@@ -1,7 +1,7 @@
 streamlit
 pymupdf
 pandas
-pil
+pillow
 pytesseract
 pdf2image
 pysqlite3-binary
