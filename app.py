@@ -22,7 +22,7 @@ import pytesseract
 from PIL import Image
 import openpyxl
 
-pytesseract.pytesseract.tesseract_cmd = r'\"\Program Files\Tesseract-OCR'
+pytesseract.pytesseract.tesseract_cmd = "/Program Files/Tesseract-OCR/tesseract"
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
