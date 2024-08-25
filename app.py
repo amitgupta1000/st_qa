@@ -27,9 +27,6 @@ import pytesseract
 from PIL import Image
 import openpyxl
 
-tesseract_cmd = os.path.join(os.path.dirname(__file__), "assets", "tesseract.exe")
-pytesseract.pytesseract.tesseract_cmd = tesseract_cmd
-
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 
