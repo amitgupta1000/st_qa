@@ -26,7 +26,7 @@ from pdf2image import convert_from_path
 import pytesseract
 from PIL import Image
 import openpyxl
-
+pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract'
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 
