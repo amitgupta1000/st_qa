@@ -22,6 +22,7 @@ import pytesseract
 from PIL import Image
 import openpyxl
 
+pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
