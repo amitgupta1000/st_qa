@@ -18,7 +18,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 from typing import List, Dict, Any
 from pdf2image import convert_from_path
 import pytesseract
-from PIL import Image
+from pillow import Image
+import openpyxl
+
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
